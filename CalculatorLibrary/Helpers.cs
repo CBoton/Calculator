@@ -3,7 +3,7 @@ using System.Security.AccessControl;
 
 namespace CalculatorLibrary
 {
-    public class Helpers
+    internal class Helpers
     {
         internal static List<Problem> problems = new List<Problem>();
 

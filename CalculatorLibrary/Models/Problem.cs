@@ -6,7 +6,7 @@
 
         public double SecondNumber { get; set; }
 
-        public char Operand { get; set; }
+        public char Operation { get; set; }
 
         public double Answer { get; set; }
     }

@@ -17,10 +17,9 @@ namespace CalculatorLibrary
             writer.WritePropertyName("Operations");
             writer.WriteStartArray();
         }
-
-        public double DoOperation(double num1, double num2, string op)
+        public double DoOperation(double num1, string op, double num2 = 0 )
         {
-            char operand;
+            char operation;
             double result = double.NaN; // Default value is "not-a-number" if an operation, such as division, could result in an error.
             writer.WriteStartObject();
             writer.WritePropertyName("Operand1");
@@ -34,16 +33,20 @@ namespace CalculatorLibrary
                 case "a":
                     result = num1 + num2;
                     writer.WriteValue("Add");
-                    operand = '+';
-                    Helpers.AddToProblems(num1, operand, num2, result);
+                    operation = '+';
+                    Helpers.AddToProblems(num1, operation, num2, result);
                     break;
                 case "s":
                     result = num1 - num2;
                     writer.WriteValue("Subtract");
+                    operation = '-';
+                    Helpers.AddToProblems(num1, operation, num2, result);
                     break;
                 case "m":
                     result = num1 * num2;
                     writer.WriteValue("Multiply");
+                    operation = '*';
+                    Helpers.AddToProblems(num1, operation, num2, result);
                     break;
                 case "d":
                     // Ask the user to enter a non-zero divisor.
@@ -52,6 +55,8 @@ namespace CalculatorLibrary
                         result = num1 / num2;
                     }
                     writer.WriteValue("Divide");
+                    operation = '/';
+                    Helpers.AddToProblems(num1, operation, num2, result);
                     break;
                 // Return text for an incorrect option entry.
                 default:

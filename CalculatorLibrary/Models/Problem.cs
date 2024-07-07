@@ -10,6 +10,4 @@
 
         public double Answer { get; set; }
     }
-
-    
 }

@@ -4,9 +4,7 @@ namespace CalculatorLibrary
 {
     public class Calculator
     {
-
         JsonWriter writer;
-
         public Calculator()
         {
             StreamWriter logFile = File.CreateText("calculatorlog.json");
@@ -58,6 +56,18 @@ namespace CalculatorLibrary
                     operation = '/';
                     Helpers.AddToProblems(num1, operation, num2, result);
                     break;
+                case "e":
+                    result = Math.Pow(num1, num2);
+                    writer.WriteValue("Exponent");
+                    operation = '^';
+                    Helpers.AddToProblems(num1, operation, num2, result);
+                    break;
+                case "r":
+                    result = Math.Sqrt(num1);
+                    writer.WriteValue("Root");
+                    operation = '\u221A';
+                    Helpers.AddToProblems(operation, num1, result);
+                    break;
                 // Return text for an incorrect option entry.
                 default:
                     break;
@@ -68,7 +78,6 @@ namespace CalculatorLibrary
 
             return result;
         }
-
         public void Finish()
         {
             writer.WriteEndArray();

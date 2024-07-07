@@ -2,7 +2,7 @@
 
 namespace CalculatorLibrary
 {
-    internal class Helpers
+    public class Helpers
     {
         internal static List<Problem> problems = new List<Problem>();
 
@@ -12,18 +12,34 @@ namespace CalculatorLibrary
             Console.WriteLine("Previous Problems");
             Console.WriteLine("---------------------\n");
             int counter = 0;
-            foreach (var problem in problems)
+            for (int i = 0; i < problems.Count; i++)
             {
-                Console.WriteLine($"{counter + 1}. {problem.FirstNumber} {problem.Operation} {problem.SecondNumber} = {problem.Answer}");
-                counter++;
+                if (problems[i].Operation == '\u221A')
+                {
+                    Console.WriteLine($"{counter + 1}.  {problems[i].Operation} {problems[i].FirstNumber} = {problems[i].Answer}");
+                    counter++;
+                }
+                else
+                {
+                    Console.WriteLine($"{counter + 1}. {problems[i].FirstNumber} {problems[i].Operation} {problems[i].SecondNumber} = {problems[i].Answer}");
+                    counter++;
+                }
             }
         }
-
         public static void ClearProblems()
         {
             problems.Clear();
         }
 
+        internal static void AddToProblems(char operation, double firstNumber,  double answer)
+        {
+            problems.Add(new Problem
+            {
+                Operation = operation,
+                FirstNumber = firstNumber,
+                Answer = answer
+            });
+        }
         internal static void AddToProblems(double firstNumber, char operation, double secondNumber, double answer)
         {
             problems.Add(new Problem
@@ -34,23 +50,14 @@ namespace CalculatorLibrary
                 Answer = answer
             });
         }
-
         public static double GetNumber()
         {
             string? choice;
             string? numInput;
-            Console.WriteLine("Press 'n' to enter a number or 'l' to use a previous problem");
-            choice = Console.ReadLine();
-            while (choice != "n" && choice != "l")
-            {
-                Console.WriteLine("Press 'n' to enter a number or 'l' to use a previous problem");
-                choice = Console.ReadLine();
-            }
-            if (choice == "n")
+            if (problems.Count == 0)
             {
                 Console.Write("Type a number, and then press Enter: ");
                 numInput = Console.ReadLine();
-
                 double cleanNum = 0;
                 while (!double.TryParse(numInput, out cleanNum))
                 {
@@ -61,26 +68,48 @@ namespace CalculatorLibrary
             }
             else
             {
-                PrintProblems();
-                Console.WriteLine("Which problem would you like to use?");
-                numInput = Console.ReadLine();
-                double cleanNum = 0;
-                while (!double.TryParse(numInput, out cleanNum) )
+                Console.WriteLine("Press 'n' to enter a number or 'l' to use a previous problem");
+                choice = Console.ReadLine();
+                while (choice != "n" && choice != "l")
                 {
-                    Console.Write("This is not valid input. Please enter an integer value: ");
-                    numInput = Console.ReadLine();
+                    Console.WriteLine("Press 'n' to enter a number or 'l' to use a previous problem");
+                    choice = Console.ReadLine();
                 }
-                while (cleanNum < 1 || cleanNum > problems.Count)
+                if (choice == "n")
                 {
-                    Console.Write("Invalid choice, select a number from the list");
+                    Console.Write("Type a number, and then press Enter: ");
                     numInput = Console.ReadLine();
+
+                    double cleanNum = 0;
+                    while (!double.TryParse(numInput, out cleanNum))
+                    {
+                        Console.Write("This is not valid input. Please enter an integer value: ");
+                        numInput = Console.ReadLine();
+                    }
+                    return cleanNum;
                 }
-                int selection = int.Parse(numInput);
-                cleanNum = problems[selection - 1].Answer;
-                return cleanNum;
+                else
+                {
+                    PrintProblems();
+                    Console.WriteLine("Which problem would you like to use?");
+                    numInput = Console.ReadLine();
+                    double cleanNum = 0;
+                    while (!double.TryParse(numInput, out cleanNum))
+                    {
+                        Console.Write("This is not valid input. Please enter an integer value: ");
+                        numInput = Console.ReadLine();
+                    }
+                    while (cleanNum < 1 || cleanNum > problems.Count)
+                    {
+                        Console.Write("Invalid choice, select a number from the list");
+                        numInput = Console.ReadLine();
+                    }
+                    int selection = int.Parse(numInput);
+                    cleanNum = problems[selection - 1].Answer;
+                    return cleanNum;
+                }
             }
         }
-
         public static void PrintMenu()
         {
             Console.WriteLine("Choose an operator from the following list:");
@@ -88,6 +117,8 @@ namespace CalculatorLibrary
             Console.WriteLine("\ts - Subtract");
             Console.WriteLine("\tm - Multiply");
             Console.WriteLine("\td - Divide");
+            Console.WriteLine("\te - Exponent");
+            Console.WriteLine("\tr - Square Root");
             Console.WriteLine("\tl - List previous problems");
             Console.WriteLine("\tc - Clear previous problems");
             Console.Write("Your option? ");
